@@ -1,2 +1,89 @@
-# docker-private-registry
-Remove inactive images in docker registries. Plus, cleaning CI and Production environment.
+# 🐳 docker-private-registry
+The following will be daily updated as an activity-log to task-progress.
+```Console
+*** Problem: We have three servers.
+$ Server one is running:
+  1) Azure Pipeline on localhost.
+  2) Docker registry.
+$ Server two and three are:
+  - Clients pulling from docker-private-registry.
+  - They are controlled by docker swarm.
+```
+
+## 🔧 Warm up on some crucial concepts
+- One docker image can have multiple manifests, each manifest has a unique digest.
+- Manifest: can be defined in this context as list of layers for a particular digest.
+- Layers are shared amongst manifests, each manifest maintains a set of references to needed layers.
+- As long as a layer is referenced by one manifest, it cannot be garbage collected.
+
+## 🦦 Proposed solutions:
+### 🧐 For Azure Pipline
+```Console
+*** In the case of "a few number of runs per day", I suggest 
+a daily cron job that deletes all images for the sake of disk-space.
+$ docker rmi $(docker images -a -q)
+$ Pros:
+  - Stupid Simple.
+$ Cons:
+  - Doker is built to share layers among manifests.
+  - This way repeated work will be redone on a daily manner.
+  - That might affect the speed of the first few runnes of the day.
+```
+
+### 🧐 For Docker registry
+#### First solution:
+- [ ] A script will ssh to the first server and gain access to doker-registry shell.
+- [ ] List all images using one of the following commands:
+```Console
+ziadh@Ziads-MacBook-Air ~ % docker images                                                  
+REPOSITORY                     TAG       IMAGE ID       CREATED        SIZE
+ziadmmh/bigoven-backend        latest    2997db7f8fa9   13 days ago    221MB
+ziadmmh/bigoven-frontend       latest    c9fb943bf950   13 days ago    221MB
+ziadmmh/bigoven-reverseproxy   latest    820d028cd13e   13 days ago    22.1MB
+redis                          latest    07dcd1b2e705   4 months ago   111MB
+postgres                       latest    12b9b2057476   4 months ago   355MB
+gcr.io/k8s-minikube/kicbase    v0.0.30   6a29e77b4fe6   7 months ago   1.04GB
+ziadh@Ziads-MacBook-Air ~ % docker images --format "{{.ID}}:{{.Repository}}:{{.Tag}}" 
+2997db7f8fa9:ziadmmh/bigoven-backend:latest
+c9fb943bf950:ziadmmh/bigoven-frontend:latest
+820d028cd13e:ziadmmh/bigoven-reverseproxy:latest
+07dcd1b2e705:redis:latest
+12b9b2057476:postgres:latest
+6a29e77b4fe6:gcr.io/k8s-minikube/kicbase:v0.0.30
+```
+
+```Console
+*** 🚨 Questions:
+$ Are you always using the latest tag?
+$ This solution intends to keep only the latest 10 manifests
+and reomves others that their digest might be mentioned in some code!
+$ What are the naming convention of docker images on the registry?
+lost it from meeting-notes ^^
+```
+
+- [ ] Keep only the latest 10 manifests of each docker image stored in the docker registry.
+
+#### Second solution - [link](https://docs.docker.com/registry/garbage-collection/):
+- [ ] Use v2 docker registry REST API to delete manifests.
+- [ ] Run Garbage collector to delete unrefrenced layers - [link](https://mirror-medium.com/?m=https%3A%2F%2Fmedium.com%2Fm%2Fglobal-identity%3FredirectUrl%3Dhttps%253A%252F%252Fbetterprogramming.pub%252Fcleanup-your-docker-registry-ef0527673e3a).
+```Console
+*** Garbage Collector:
+$ Was added to docker registry v2.4.0.
+$ This type of garbage collection is known as:
+stop-the-world garbage collection
+```
+
+
+## ➕ ToDo:
+- [ ] Spin an EC2 instance and create a test enviroment with [private-docker-registry](https://www.digitalocean.com/community/tutorials/how-to-set-up-a-private-docker-registry-on-ubuntu-20-04).
+- [ ] Test docker-registry first proposed sollution.
+- [ ] Create a github action workflow that runs a bash script using [schedule](https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#schedule).
+- [ ] See if docker swarm can by any means manage / manipulate stored images on local nodes. So, we can put a plan to clean them.
+
+
+
+
+
+
+
+
