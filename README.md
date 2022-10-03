@@ -1,4 +1,4 @@
-# 🐳 docker-private-registry
+# 🐳 Day 01/02: docker-private-registry
 The following will be daily updated as an activity-log to task-progress.
 ```Console
 *** Problem: We have three servers.
@@ -83,7 +83,43 @@ stop-the-world garbage collection
 
 
 
+# 🐳 Day 02/02: docker-private-registry - [API](https://registry.sreboy.com/v2/)
+```Console
+*** My goal for the second day was to:
+$ Create a docker-registry on AWS EC2 instance as a test enviroment.
+$ Test delete images from docker-private registry.
+```
 
 
+## 🦦 Checklist of the day
+- [X] Read: How To Set Up a Private Docker Registry on Ubuntu 20.04 - [link](https://www.digitalocean.com/community/tutorials/how-to-set-up-a-private-docker-registry-on-ubuntu-20-04).
+- [X] Read: How To Install Nginx on Ubuntu 20.04 - [link](https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-20-04).
+- [X] Read: How To Secure Nginx with Let's Encrypt on Ubuntu 20.04 - [link](https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-20-04).
+- [X] Hosted: docker-private-registry at a subdomain of my SREboy.com domain.
+- [X] Spin an EC2 instance and create a test enviroment with [private-docker-registry](https://www.digitalocean.com/community/tutorials/how-to-set-up-a-private-docker-registry-on-ubuntu-20-04).
 
+```Console
+*** to use my private-docker-registry
+$ Host: registry.sreboy.com
+$ User: docker
+$ Password: silver
+$ docker login https://registry.sreboy.com
+Authenticating with existing credentials...
+Login Succeeded
+$ docker pull registry.sreboy.com/test-image
+Using default tag: latest
+latest: Pulling from test-image
+Digest: sha256:a3db5309fb6bdd5511699b51fb27b3e3a9e2d1e0aa21ae0dc280d6e81a71fa1e
+Status: Image is up to date for registry.sreboy.com/test-image:latest
+registry.sreboy.com/test-image:latest
+$ docker run -it registry.sreboy.com/test-image /bin/bash
+root@01166b678c4f:/# ls
+SUCCESS  bin  boot  dev  etc  home  lib  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  var
+```
 
+✅ The ```SUCCESS``` file, confirms that its the same custom ubuntu based image I create and pushed.
+
+## ➕ ToDo:
+- [ ] Test docker-registry first proposed sollution.
+- [ ] Create a github action workflow that runs a bash script using [schedule](https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#schedule).
+- [ ] See if docker swarm can by any means manage / manipulate stored images on local nodes. So, we can put a plan to clean them.
