@@ -81,6 +81,7 @@ stop-the-world garbage collection
 - [ ] See if docker swarm can by any means manage / manipulate stored images on local nodes. So, we can put a plan to clean them.
 
 
+----------
 
 
 # 🐳 Day 02/02: docker-private-registry - [API](https://registry.sreboy.com/v2/)
