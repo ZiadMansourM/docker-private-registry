@@ -121,6 +121,6 @@ SUCCESS  bin  boot  dev  etc  home  lib  media  mnt  opt  proc  root  run  sbin 
 ✅ The ```SUCCESS``` file, confirms that its the same custom ubuntu based image I create and pushed.
 
 ## ➕ ToDo:
-- [ ] Test docker-registry first proposed sollution - [link](https://stackoverflow.com/questions/25436742/how-to-delete-images-from-a-private-docker-registry).
+- [ ] Test delete images from the docker-private-registry - [link](https://stackoverflow.com/questions/25436742/how-to-delete-images-from-a-private-docker-registry).
 - [ ] Create a github action workflow that runs a bash script using [schedule](https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#schedule).
 - [ ] See if docker swarm can by any means manage / manipulate stored images on local nodes. So, we can put a plan to clean them.
