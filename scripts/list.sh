@@ -21,11 +21,12 @@ do
     for TAG in $TAGS
     do
         DIGIST=$(\
-            curl -sS --user $USER:$PASSWORD \
-            -H 'Accept: application/vnd.docker.distribution.manifest.v2+json' \
+            curl -v -sS --user $USER:$PASSWORD \
+            -H 'Accept: application/vnd.docker.distribution.manifest.v2+json' 2>&1 \
             https://$HOST/v2/$REPO/manifests/$TAG \
-            | python3 -c "import sys, json; print(json.load(sys.stdin)['config']['digest'])"\
+            | grep -i "< Docker-Content-Digest:"|awk '{print $3}' \
         )
         echo $REPO:$TAG:$DIGIST
     done
+    echo -------------
 done
