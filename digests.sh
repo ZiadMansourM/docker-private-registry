@@ -15,6 +15,7 @@ do
         curl -sS --user $USER:$PASSWORD  https://$HOST/v2/$REPO/tags/list \
         | python3 -c "import sys, json; data=json.load(sys.stdin)['tags']; [print(tag) for tag in data]"\
     )
+    TAGS=$(echo $TAGS | xargs -n1 | sort --version-sort | xargs)
     for TAG in $TAGS
     do
         DIGIST=$(\
