@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Return DIGISTS of to be deleted tags
+# Deletes all tags but keeps latest 4 tags including 'latest'
 
 HOST=registry.sreboy.com
 USER=docker
@@ -26,13 +26,25 @@ do
         for TAG in ${D_TAGS[@]}
         do
             DIGIST=$(\
-                curl -sS --user $USER:$PASSWORD \
-                -H 'Accept: application/vnd.docker.distribution.manifest.v2+json' \
+                curl -v -sS --user $USER:$PASSWORD \
+                -H 'Accept: application/vnd.docker.distribution.manifest.v2+json' 2>&1 \
                 https://$HOST/v2/$REPO/manifests/$TAG \
-                | python3 -c "import sys, json; print(json.load(sys.stdin)['config']['digest'])"\
+                | grep -i "< Docker-Content-Digest:"|awk '{print $3}' \
             )
-            echo Deleting $REPO:$TAG:$DIGIST
-            # curl -sS -X DELETE <domain-or-ip>:5000/v2/<repo>/manifests/<digest>
+            IMAGE=$REPO:$TAG:$DIGIST
+            echo Deleting $IMAGE
+            DIGIST=`echo $DIGIST | sed 's/\\r//g'`
+            # echo "'$DIGIST'" | LC_ALL=C cat -vt
+            RESPONCE=$(curl -sS -o /dev/null -w "%{http_code}" --user $USER:$PASSWORD -H 'Accept: application/vnd.docker.distribution.manifest.v2+json' -X DELETE "https://registry.sreboy.com/v2/$REPO/manifests/${DIGIST}")
+            if [[ $RESPONCE -eq "202" ]]; then
+                echo "Successfully deleted $IMAGE"
+            else
+                echo "Failed to delete<$RESPONCE>: $IMAGE"
+            fi
         done
+    else
+        echo "Nothing to delete in $REPO only ${#ARRAY[@]} TAGS exists"
     fi
 done
+
+# sudo docker exec -it -u root df6f4d3612e1 bin/registry garbage-collect --dry-run --delete-untagged /etc/docker/registry/config.yml
