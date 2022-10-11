@@ -145,7 +145,7 @@ $ Push all tags to registry.sreboy.com
 - [ ] Test delete images from the docker-private-registry - [link](https://stackoverflow.com/questions/25436742/how-to-delete-images-from-a-private-docker-registry).
 - [ ] Create bash script mark_digests.sh that calls registry API and delete inactive or old tags:
 ```Console
-$ [1]: Sort all image tags.
+$ [1]: Sort all image based on their tags.
 silver-image:20221007.1_8:sha256:10e312f5da57219d6e7679d20f083696ab28976674af75662a469fd2b3c7c946
 silver-image:20221007.1_9:sha256:8b6197ddd8f55b4bac7499852a29a6ab02ce70f074c8d029a5ba45f4c31c2453
 silver-image:20221007.1_10:sha256:5481b25ec3be8bd7015b40788a0d4a3fdeecd94066fa2e8f55e12c6e77905679
@@ -153,11 +153,26 @@ silver-image:latest:sha256:5481b25ec3be8bd7015b40788a0d4a3fdeecd94066fa2e8f55e12
 $ [2]: Checks number of tags and keeps the latest 4 TAGS inluding latest so 
 20221007.1_1 till 20221007.1_7 will be DELETED if existed
 ```
+- [ ] See how mark_digests.sh will react to images with multi tags that doesn't follow naming convention.
 - [ ] Create a bash script to free dick space called garbage_collect.sh that:
 ```Console
-$ [1]: ssh to server and run the following command;
+$ [1]: ssh to server and run the following command:
 sudo docker exec -it -u root <REGISTRY_CONTAINER_ID> bin/registry garbage-collect --delete-untagged /etc/docker/registry/config.yml
 $ we need to garbage_collect as deleting a tag from the API only makes it inaccessible from API.
+```
+- [ ] Automate "mark_digests.sh, garbage_collect.sh" on github actions workflow with schedule.
+- [ ] Create script clean_ci_env.sh to clean CI server.
+```Console
+$ docker container prune --force
+WARNING! This will remove all stopped containers.
+$ docker image prune -a --force
+WARNING! This will remove all images without at least one container associated to them.
+```
+
+``` OR ```
+
+```Console
+$ docker images --format "{{.Repository}}" | uniq | grep registry.sreboy.com
 ```
 
 ## 🦦 Checklist of the day
