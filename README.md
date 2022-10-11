@@ -1,4 +1,4 @@
-# 🐳 Day 01/02: docker-private-registry
+# 🐳 Day 01/03: docker-private-registry
 The following will be daily updated as an activity-log to task-progress.
 ```Console
 *** Problem: We have three servers.
@@ -84,7 +84,7 @@ stop-the-world garbage collection
 ----------
 
 
-# 🐳 Day 02/02: docker-private-registry - [API](https://registry.sreboy.com/v2/)
+# 🐳 Day 02/03: docker-private-registry - [API](https://registry.sreboy.com/v2/)
 ```Console
 *** My goal for the second day was to:
 $ Create a docker-registry on AWS EC2 instance as a test enviroment.
@@ -124,3 +124,40 @@ SUCCESS  bin  boot  dev  etc  home  lib  media  mnt  opt  proc  root  run  sbin 
 - [ ] Test delete images from the docker-private-registry - [link](https://stackoverflow.com/questions/25436742/how-to-delete-images-from-a-private-docker-registry).
 - [ ] Create a github action workflow that runs a bash script using [schedule](https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#schedule).
 - [ ] See if docker swarm can by any means manage / manipulate stored images on local nodes. So, we can put a plan to clean them.
+
+
+
+# 🐳 Day 03/03: docker-private-registry - [API](https://registry.sreboy.com/v2/)
+#### 🧐 My goal for today was to:
+- [ ] Create bash script list.sh that calls registry API and list all repositories on the registry plus all (Tags && Digests) withen that repository.
+```Console
+$ echo $REPO:$TAG:$DIGIST
+silver-image:20221007.1_10:sha256:5481b25ec3be8bd7015b40788a0d4a3fdeecd94066fa2e8f55e12c6e77905679
+silver-image:latest:sha256:5481b25ec3be8bd7015b40788a0d4a3fdeecd94066fa2e8f55e12c6e77905679
+```
+- [ ] Create bash script generate.sh that:
+```Console
+$ Creates a dummy image.
+$ Generate many Tags of that image following this pattern:
+${HOST}/${IMAGE_NAME}:${TODAY}.${DAILY_RUN_NUM}_${RUN_NUM}
+$ Push all tags to registry.sreboy.com
+```
+- [ ] Test delete images from the docker-private-registry - [link](https://stackoverflow.com/questions/25436742/how-to-delete-images-from-a-private-docker-registry).
+- [ ] Create bash script mark_digests.sh that calls registry API and delete inactive or old tags:
+```Console
+$ [1]: Sort all image tags.
+silver-image:20221007.1_8:sha256:10e312f5da57219d6e7679d20f083696ab28976674af75662a469fd2b3c7c946
+silver-image:20221007.1_9:sha256:8b6197ddd8f55b4bac7499852a29a6ab02ce70f074c8d029a5ba45f4c31c2453
+silver-image:20221007.1_10:sha256:5481b25ec3be8bd7015b40788a0d4a3fdeecd94066fa2e8f55e12c6e77905679
+silver-image:latest:sha256:5481b25ec3be8bd7015b40788a0d4a3fdeecd94066fa2e8f55e12c6e77905679
+$ [2]: Checks number of tags and keeps the latest 4 TAGS inluding latest so 
+20221007.1_1 till 20221007.1_7 will be DELETED if existed
+```
+- [ ] Create a bash script to free dick space called garbage_collect.sh that:
+```Console
+$ [1]: ssh to server and run the following command;
+sudo docker exec -it -u root <REGISTRY_CONTAINER_ID> bin/registry garbage-collect --delete-untagged /etc/docker/registry/config.yml
+$ we need to garbage_collect as deleting a tag from the API only makes it inaccessible from API.
+```
+
+## 🦦 Checklist of the day
