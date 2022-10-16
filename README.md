@@ -1,4 +1,6 @@
 # 🐳 Day 01/03: docker-private-registry
+
+
 The following will be daily updated as an activity-log to task-progress.
 ```Console
 *** Problem: We have three servers.
@@ -9,6 +11,10 @@ $ Server two and three are:
   - Clients pulling from docker-private-registry.
   - They are controlled by docker swarm.
 ```
+
+
+<details>
+<summary>🚨 Show Day One Log</summary>
 
 ## 🔧 Warm up on some crucial concepts
 - One docker image can have multiple manifests, each manifest has a unique digest.
@@ -80,16 +86,22 @@ stop-the-world garbage collection
 - [ ] Create a github action workflow that runs a bash script using [schedule](https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#schedule).
 - [ ] See if docker swarm can by any means manage / manipulate stored images on local nodes. So, we can put a plan to clean them.
 
+</details>
 
 ----------
 
 
 # 🐳 Day 02/03: docker-private-registry - [API](https://registry.sreboy.com/v2/)
+
 ```Console
 *** My goal for the second day was to:
 $ Create a docker-registry on AWS EC2 instance as a test enviroment.
 $ Test delete images from docker-private registry.
 ```
+
+
+<details>
+<summary>🚨 Show Day Two Log</summary>
 
 
 ## 🦦 Checklist of the day
@@ -125,58 +137,54 @@ SUCCESS  bin  boot  dev  etc  home  lib  media  mnt  opt  proc  root  run  sbin 
 - [ ] Create a github action workflow that runs a bash script using [schedule](https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#schedule).
 - [ ] See if docker swarm can by any means manage / manipulate stored images on local nodes. So, we can put a plan to clean them.
 
+</details>
+
+---------------------
 
 
 # 🐳 Day 03/03: docker-private-registry - [API](https://registry.sreboy.com/v2/)
-#### 🧐 My goal for today was to:
-- [ ] Create bash script list.sh that calls registry API and list all repositories on the registry plus all (Tags && Digests) withen that repository.
-```Console
-$ echo $REPO:$TAG:$DIGIST
-silver-image:20221007.1_10:sha256:5481b25ec3be8bd7015b40788a0d4a3fdeecd94066fa2e8f55e12c6e77905679
-silver-image:latest:sha256:5481b25ec3be8bd7015b40788a0d4a3fdeecd94066fa2e8f55e12c6e77905679
-```
-- [ ] Create bash script generate.sh that:
-```Console
-$ Creates a dummy image.
-$ Generate many Tags of that image following this pattern:
-${HOST}/${IMAGE_NAME}:${TODAY}.${DAILY_RUN_NUM}_${RUN_NUM}
-$ Push all tags to registry.sreboy.com
-```
-- [ ] Test delete images from the docker-private-registry - [link](https://stackoverflow.com/questions/25436742/how-to-delete-images-from-a-private-docker-registry).
-- [ ] Create bash script mark_digests.sh that calls registry API and delete inactive or old tags:
-```Console
-$ [1]: Sort all image based on their tags.
-silver-image:20221007.1_8:sha256:10e312f5da57219d6e7679d20f083696ab28976674af75662a469fd2b3c7c946
-silver-image:20221007.1_9:sha256:8b6197ddd8f55b4bac7499852a29a6ab02ce70f074c8d029a5ba45f4c31c2453
-silver-image:20221007.1_10:sha256:5481b25ec3be8bd7015b40788a0d4a3fdeecd94066fa2e8f55e12c6e77905679
-silver-image:latest:sha256:5481b25ec3be8bd7015b40788a0d4a3fdeecd94066fa2e8f55e12c6e77905679
-$ [2]: Checks number of tags and keeps the latest 4 TAGS inluding latest so 
-20221007.1_1 till 20221007.1_7 will be DELETED if existed
-```
-- [ ] See how mark_digests.sh will react to images with multi tags that doesn't follow naming convention.
-- [ ] Create a bash script to free dick space called garbage_collect.sh that:
-```Console
-$ [1]: ssh to server and run the following command:
-sudo docker exec -it -u root <REGISTRY_CONTAINER_ID> bin/registry garbage-collect --delete-untagged /etc/docker/registry/config.yml
-$ we need to garbage_collect as deleting a tag from the API only makes it inaccessible from API.
-```
-- [ ] Automate "mark_digests.sh, garbage_collect.sh" on github actions workflow with schedule.
-- [ ] Create script clean_ci_env.sh to clean CI server.
-```Console
-$ docker container prune --force
-WARNING! This will remove all stopped containers.
-$ docker image prune -a --force
-WARNING! This will remove all images without at least one container associated to them.
-```
-
-``` OR ```
 
 ```Console
-$ docker rmi $(docker images -q $HOST/$REPO:$TAG)
+*** My goal for the second day was to:
+$ [1]: Retrive all repositories' (Tags && Digests) using registry API.
+silver-image:20221007.1_10:sha256:5481b25ec3be8bd7015b40788a0d4a3fdeecd94066fa2e8f55e12c6e77905679
+silver-image:latest:sha256:5481b25ec3be8bd7015b40788a0d4a3fdeecd94066fa2e8f55e12c6e77905679
+$ [2]: Create Bash script generate.sh to create dummy image tags and push all tags.
+{HOST}/${IMAGE_NAME}:${TODAY}.${DAILY_RUN_NUM}_${RUN_NUM}
+$ [3]: Test delete images from docker-private registry.
+https://stackoverflow.com/questions/25436742/how-to-delete-images-from-a-private-docker-registry
+$ [4]: Create bash script mark_digests.sh that calls registry API and delete inactive or old tags "Sort => Delete":
+FIRST_STEP
+production-image:20221016.1_1:sha256:71b4eba1665a13d9ad27b02a9480296335dc5937cdd6cc2b4709262bbc1a576a
+production-image:20221016.1_2:sha256:b52d978b938250d92ac5349ba3f36d19322e0a1212e58fd13a07a7410119a00f
+production-image:20221016.1_3:sha256:6ebb5facb37d39fd695e3572691b88e075a6abf5b5ab7bb834c3fb2cb4e34948
+production-image:20221016.1_4:sha256:073b3de8d288dbfc7df5bc5494c9869685953d58a2077649b9b04ed2d0a83916
+production-image:20221016.1_5:sha256:4efbdb5d520cd14766a56249307a2ed5b7179ffd00df146d302f91f167b271cf
+production-image:20221016.1_6:sha256:1914883789acdd2e0b25e084e94dc2887e53fb8cdd2d74db0c26d15b68b565c2
+production-image:20221016.1_7:sha256:6b493b7e5b07551f0daf3d503534596f478cd920e7020d48bb6d6322c4ca37f2
+production-image:20221016.1_8:sha256:296c094412f868500a8c522e190f1302db9f4079e11291e01d596ce0a122a7bc
+production-image:20221016.1_9:sha256:6588c859f407a074e2c4db2b62352d1ca5cc79d03d88aea0cc9d6f4a41f7be3f
+production-image:20221016.1_10:sha256:163d50f50d389ea7d187cd4eed62bb66f50672c0ef7a6b8cdd51a3aef955dea7
+production-image:latest:sha256:163d50f50d389ea7d187cd4eed62bb66f50672c0ef7a6b8cdd51a3aef955dea7
+SECOND_STEP
+220221016.1_1 till 20221016.1_7 here will be DELETED
+$ [5]: Study how mark_digests.sh will react to images with multi tags that doesn't follow naming convention.
+$ [6]: Create a bash script to free dick space called garbage_collect.sh.
+$ [7]: Push tag to the same repo that you deleted tags from.
+$ [8]: Create script ci_clean.sh to clean CI server.
+$ [9]: Automate "mark_digests.sh, garbage_collect.sh, ci_clean.sh" on github actions workflow with schedule.
 ```
+
+<details>
+<summary>🚨 Show Day Three Log</summary>
 
 ## 🦦 Checklist of the day
 - [X] Create bash script [generate.sh](https://github.com/ZiadMansourM/docker-private-registry/blob/master/scripts/generate.sh) that:
+
+
+<details>
+<summary>🧐 Show Output</summary>
+
 ```Console
 ziadh@Ziads-MacBook-Air clean_master % ./scripts/generate.sh 
 sha256:18fbf635b5e09cdbbd8454cb170fef6a4e22be6f887429192704689023bbe8e0
@@ -328,7 +336,11 @@ abddab176b9a: Layer already exists
 5d3e392a13a0: Layer already exists 
 latest: digest: sha256:163d50f50d389ea7d187cd4eed62bb66f50672c0ef7a6b8cdd51a3aef955dea7 size: 2588
 ```
+
+</details>
+
 - [X] Create bash script [list.sh](https://github.com/ZiadMansourM/docker-private-registry/blob/master/scripts/list.sh) that calls registry API and list all repositories on the registry plus all (Tags && Digests) withen that repository.
+
 ```Console
 ziadh@Ziads-MacBook-Air clean_master % ./scripts/list.sh    
 hello-image:2:sha256:45e778c30b2c810b1b0d7ddac3119d4424b17db362448c879c0195a22bbfe1ed
@@ -430,6 +442,11 @@ ziadh@Ziads-MacBook-Air clean_master %
 
 - [X] Create a bash script to free dick space called [garbage_collect.sh](https://github.com/ZiadMansourM/docker-private-registry/blob/master/scripts/garbage_collect.sh) that:
 #### ⚠️ --dry-run
+
+
+<details>
+<summary>🧐 Show Output</summary>
+
 ```Console
 ziadh@Ziads-MacBook-Air clean_master % cat ./scripts/garbage_collect.sh | ssh docker-registry
 ID=df6f4d3612e1
@@ -554,7 +571,16 @@ blob eligible for deletion: sha256:9f29da67fdbf1ae21f1ad0df18452f87f543a3a74ca5f
 blob eligible for deletion: sha256:c114149236cc06f02e863f87ce68cdd88987b15a2207968f6c54f8f544db272e
 ziadh@Ziads-MacBook-Air clean_master % 
 ```
+
+</details>
+
 #### ⚠️ removed --dry-run
+
+
+<details>
+<summary>🧐 Show Output</summary>
+
+
 ```Console
 ziadh@Ziads-MacBook-Air clean_master % cat ./scripts/garbage_collect.sh | ssh docker-registry
 ID=df6f4d3612e1
@@ -700,6 +726,9 @@ time="2022-10-16T22:35:14.665617542Z" level=info msg="Deleting blob: /docker/reg
 time="2022-10-16T22:35:14.666188151Z" level=info msg="Deleting blob: /docker/registry/v2/blobs/sha256/ff/ff29a2f3391c201fdcf93266dbd193297612e79f6b860ca1831acf7c12072570" go.version=go1.16.15 instance.id=bbf43fcf-4a4d-4aa3-862f-9d41e6384d43 service=registry 
 ziadh@Ziads-MacBook-Air clean_master % 
 ```
+
+</details>
+
 - [X] Create script [ci_clean.sh](https://github.com/ZiadMansourM/docker-private-registry/blob/master/scripts/ci_clean.sh) to clean CI server.
 ```Console
 ziadh@Ziads-MacBook-Air clean_master % ./scripts/ci_clean.sh
@@ -728,3 +757,5 @@ ziadh@Ziads-MacBook-Air clean_master %
 - [ ] Study how mark_digests.sh will react to images with multi tags that doesn't follow naming convention.
 - [ ] Push to the same repo that you deleted from.
 - [ ] Automate "mark_digests.sh, garbage_collect.sh, ci_clean.sh" on github actions workflow with schedule.
+
+</details>
