@@ -35,7 +35,12 @@ do
             echo Deleting $IMAGE
             DIGIST=`echo $DIGIST | sed 's/\\r//g'`
             # echo "'$DIGIST'" | LC_ALL=C cat -vt
-            RESPONCE=$(curl -sS -o /dev/null -w "%{http_code}" --user $USER:$PASSWORD -H 'Accept: application/vnd.docker.distribution.manifest.v2+json' -X DELETE "https://registry.sreboy.com/v2/$REPO/manifests/${DIGIST}")
+            RESPONCE=$(\
+                curl -sS -o /dev/null -w "%{http_code}" \
+                --user $USER:$PASSWORD \
+                -H 'Accept: application/vnd.docker.distribution.manifest.v2+json' \
+                -X DELETE "https://registry.sreboy.com/v2/$REPO/manifests/${DIGIST}" \
+            )
             if [[ $RESPONCE -eq "202" ]]; then
                 echo "Successfully deleted $IMAGE"
             else
