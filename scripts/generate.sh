@@ -4,7 +4,7 @@
 
 RUN_NUM=1
 DAILY_RUN_NUM=1
-IMAGE_NAME=silver-image
+IMAGE_NAME=production-image
 HOST=registry.sreboy.com
 TODAY=$(date +%Y%m%d)
 REPO=alpine
@@ -20,5 +20,5 @@ do
 done
 
 docker tag $REPO $HOST/$IMAGE_NAME:latest
-docker run $HOST/$IMAGE_NAME /bin/ls | grep foo
+docker run $HOST/$IMAGE_NAME:latest /bin/ls | grep foo
 docker push --all-tags $HOST/$IMAGE_NAME
