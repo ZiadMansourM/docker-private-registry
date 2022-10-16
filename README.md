@@ -366,7 +366,7 @@ test-image:latest:sha256:d54695c0b88d1b006f70388ce0b61cc3b1a0ad7d977cc848b8c1fcd
 ziadh@Ziads-MacBook-Air clean_master %
 ```
 - [X] Test delete images from the docker-private-registry - [link](https://stackoverflow.com/questions/25436742/how-to-delete-images-from-a-private-docker-registry).
-- [X] Create bash script mark_digests.sh that calls registry API and delete inactive or old tags:
+- [X] Create bash script [mark_digests.sh](https://github.com/ZiadMansourM/docker-private-registry/blob/master/scripts/mark_digests.sh) that calls registry API and delete inactive or old tags:
 ```Console
 ziadh@Ziads-MacBook-Air clean_master % ./scripts/mark_digests.sh 
 Nothing to delete in hello-image only 2 TAGS exists
@@ -428,7 +428,7 @@ test-image:latest:sha256:d54695c0b88d1b006f70388ce0b61cc3b1a0ad7d977cc848b8c1fcd
 ziadh@Ziads-MacBook-Air clean_master % 
 ```
 
-- [X] Create a bash script to free dick space called garbage_collect.sh that:
+- [X] Create a bash script to free dick space called [garbage_collect.sh](https://github.com/ZiadMansourM/docker-private-registry/blob/master/scripts/garbage_collect.sh) that:
 #### ⚠️ --dry-run
 ```Console
 ziadh@Ziads-MacBook-Air clean_master % cat ./scripts/garbage_collect.sh | ssh docker-registry
@@ -700,7 +700,7 @@ time="2022-10-16T22:35:14.665617542Z" level=info msg="Deleting blob: /docker/reg
 time="2022-10-16T22:35:14.666188151Z" level=info msg="Deleting blob: /docker/registry/v2/blobs/sha256/ff/ff29a2f3391c201fdcf93266dbd193297612e79f6b860ca1831acf7c12072570" go.version=go1.16.15 instance.id=bbf43fcf-4a4d-4aa3-862f-9d41e6384d43 service=registry 
 ziadh@Ziads-MacBook-Air clean_master % 
 ```
-- [X] Create script ci_clean.sh to clean CI server.
+- [X] Create script [ci_clean.sh](https://github.com/ZiadMansourM/docker-private-registry/blob/master/scripts/ci_clean.sh) to clean CI server.
 ```Console
 ziadh@Ziads-MacBook-Air clean_master % ./scripts/ci_clean.sh
 Delete Stoped containers ...
