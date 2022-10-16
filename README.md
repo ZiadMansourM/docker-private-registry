@@ -341,6 +341,10 @@ latest: digest: sha256:163d50f50d389ea7d187cd4eed62bb66f50672c0ef7a6b8cdd51a3aef
 
 - [X] Create bash script [list.sh](https://github.com/ZiadMansourM/docker-private-registry/blob/master/scripts/list.sh) that calls registry API and list all repositories on the registry plus all (Tags && Digests) withen that repository.
 
+
+<details>
+<summary>🧐 Show Output</summary>
+
 ```Console
 ziadh@Ziads-MacBook-Air clean_master % ./scripts/list.sh    
 hello-image:2:sha256:45e778c30b2c810b1b0d7ddac3119d4424b17db362448c879c0195a22bbfe1ed
@@ -377,8 +381,17 @@ test-image:latest:sha256:d54695c0b88d1b006f70388ce0b61cc3b1a0ad7d977cc848b8c1fcd
 -------------
 ziadh@Ziads-MacBook-Air clean_master %
 ```
+
+</details>
+
 - [X] Test delete images from the docker-private-registry - [link](https://stackoverflow.com/questions/25436742/how-to-delete-images-from-a-private-docker-registry).
 - [X] Create bash script [mark_digests.sh](https://github.com/ZiadMansourM/docker-private-registry/blob/master/scripts/mark_digests.sh) that calls registry API and delete inactive or old tags:
+
+
+<details>
+<summary>🧐 Show Output</summary>
+
+
 ```Console
 ziadh@Ziads-MacBook-Air clean_master % ./scripts/mark_digests.sh 
 Nothing to delete in hello-image only 2 TAGS exists
@@ -439,6 +452,8 @@ test-image:latest:sha256:d54695c0b88d1b006f70388ce0b61cc3b1a0ad7d977cc848b8c1fcd
 -------------
 ziadh@Ziads-MacBook-Air clean_master % 
 ```
+
+</details>
 
 - [X] Create a bash script to free dick space called [garbage_collect.sh](https://github.com/ZiadMansourM/docker-private-registry/blob/master/scripts/garbage_collect.sh) that:
 #### ⚠️ --dry-run
@@ -730,6 +745,11 @@ ziadh@Ziads-MacBook-Air clean_master %
 </details>
 
 - [X] Create script [ci_clean.sh](https://github.com/ZiadMansourM/docker-private-registry/blob/master/scripts/ci_clean.sh) to clean CI server.
+
+
+<details>
+<summary>🧐 Show Output</summary>
+
 ```Console
 ziadh@Ziads-MacBook-Air clean_master % ./scripts/ci_clean.sh
 Delete Stoped containers ...
@@ -754,6 +774,9 @@ REPO=hello-image...
 Nothing to delete in hello-image only 3 TAGS exists
 ziadh@Ziads-MacBook-Air clean_master % 
 ```
+
+</details>
+
 - [ ] Study how mark_digests.sh will react to images with multi tags that doesn't follow naming convention.
 - [ ] Push to the same repo that you deleted from.
 - [ ] Automate "mark_digests.sh, garbage_collect.sh, ci_clean.sh" on github actions workflow with schedule.
